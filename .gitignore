@@ -1,0 +1,12 @@
+# Ignore everything by default.
+*
+
+# Keep project sources and documentation.
+!.gitignore
+!README.md
+!Interop.csproj
+!managed/
+!managed/Interop.csproj
+!managed/Program.cs
+!native/
+!native/interop.cpp

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <NativeCompiler Condition="'$(NativeCompiler)' == ''">clang++</NativeCompiler>
+    <NativeLibraryFile>libinterop.so</NativeLibraryFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <NativeLibraryFile>interop.dll</NativeLibraryFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="managed/Program.cs" />
+    <NativeSource Include="native/interop.cpp" />
+  </ItemGroup>
+
+  <Target Name="BuildNativeLibrary"
+          BeforeTargets="Build"
+          Inputs="@(NativeSource)"
+          Outputs="$(TargetDir)$(NativeLibraryFile)">
+    <MakeDir Directories="$(TargetDir)" />
+    <Exec Command="&quot;$(NativeCompiler)&quot; -std=c++17 -shared -fPIC &quot;@(NativeSource)&quot; -o &quot;$(TargetDir)$(NativeLibraryFile)&quot;" />
+  </Target>
+</Project>
